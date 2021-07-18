@@ -9,24 +9,24 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="525.0" prefWidth="771.0" style="-fx-background-color: #ffd8bb;" stylesheets="@Inventory.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignment.Controller">
+<AnchorPane prefHeight="525.0" prefWidth="771.0" style="-fx-background-color: #ffd8bb;" stylesheets="@Style/Inventory.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignment.MainPageController">
    <children>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="-86.0" layoutY="-54.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fitHeight="533.0" fitWidth="479.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@JavaUIBG6.png" />
+            <Image url="@Style/JavaUIBG6.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="129.0" fitWidth="196.0" layoutX="520.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="129.0" fitWidth="196.0" layoutX="518.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@FInishNext4.png" />
+            <Image url="@Style/FInishNext4.png" />
          </image>
       </ImageView>
-      <TableView editable="true" layoutX="6.0" layoutY="63.0" prefHeight="451.0" prefWidth="428.0" style="-fx-background-color: transparent;" stylesheets="@Inventory.css">
+      <TableView fx:id="tableview" editable="true" layoutX="6.0" layoutY="63.0" prefHeight="421.0" prefWidth="428.0" style="-fx-background-color: transparent;" stylesheets="@Style/Inventory.css">
         <columns>
-          <TableColumn prefWidth="136.6666717529297" text="Name" />
-          <TableColumn prefWidth="186.3333282470703" text="Serial Number" />
-            <TableColumn prefWidth="104.99998474121094" text="Price" />
+          <TableColumn fx:id="colName" prefWidth="136.6666717529297" text="Name" />
+          <TableColumn fx:id="colSerial" prefWidth="186.3333282470703" text="Serial Number" />
+            <TableColumn fx:id="colPrice" prefWidth="104.99998474121094" text="Price" />
         </columns>
       </TableView>
       <TextField layoutX="54.0" layoutY="26.0" prefHeight="25.0" prefWidth="360.0" />

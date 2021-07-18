@@ -1,6 +1,6 @@
 package ucf.assignment;
 /*
- *  UCF COP3330 Summer 2021 Assignment 4 Solution
+ *  UCF COP3330 Summer 2021 Assignment 5 Solution
  *  Copyright 2021 Erica Joseph
  */
 import javafx.application.Application;
@@ -17,7 +17,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/ucf/assignment/MainInterface.fxml"))); //access the file needed to load FXML; this will be the source of the code
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/ucf/assignment/NewStyle.fxml"))); //access the file needed to load FXML; this will be the source of the code
             Scene scene = new Scene(root); // attach scene graph to scene
             stage.setTitle("Main"); // displayed in window's title bar
             //stage.getIcons().add(new Image("/resources/ucf/assignment/Style/ObentoLogoo4.png"));
