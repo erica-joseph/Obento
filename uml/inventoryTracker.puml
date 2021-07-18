@@ -1,0 +1,70 @@
+@startuml
+
+class InventoryTracker {
+    start()
+    main()
+}
+
+class SceneManager{
+    scene: MapString, String
+    load()
+    getScene(String):Scene
+}
+
+class MainWinowControl{
+    ItemModel()
+    MainWinowControl(ItemModel, SceneManager)
+    'constructor
+    addItemButtonClick(EventHandler)
+    editItemButtonClick(EventHandler)
+    removeItemButtonClick(EventHandler)
+
+    addItem(String, String, Double)
+    editItem(String, String, Double)
+    remvoveItem(String, String, Double)
+}
+
+class addItemWindowController{
+}
+
+class editItemWindowController{
+}
+
+class removeItemWindowController{
+}
+
+class searchItemWindowController{
+}
+
+class itemModel(){
+    - ObservableList <Item>
+
+}
+
+class Item(){
+    name : SimpleStringProperty
+    serialNumber : SimpleStringProperty
+    value : SimpleDoubleProperty
+
+    .getName()
+    .setName()
+    .nameProperty
+
+    ....
+}
+openjfx.org.Application <|-- InventoryTracker
+InventoryTracker -- SceneManager
+SceneManager -- MainWinowControl
+SceneManager -- AddItemController
+SceneManager -- EditItemController
+SceneManager -- ConfirmRemoveItemController
+SceneManager -- SearchItemController
+MainWinowControl *-ItemModel
+AddItemController*-ItemModel
+EditItemController*-ItemModel
+ConfirmRemoveItemController*-ItemModel
+SearchItemController*-ItemModel
+ItemModel *-- Items
+
+
+@enduml

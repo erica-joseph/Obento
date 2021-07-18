@@ -1,0 +1,41 @@
+@font-face {
+    font-family: 'LemonMilk';
+    src: url('LEMONMILK-Regular.otf');
+}
+
+@font-face {
+    font-family: 'Byom Icons';
+    src: url('Byom-Icons-Trial.ttf');
+}
+
+.button{
+    -fx-background-color: #73574c;
+    -fx-text-fill: #ffd8bb;
+    -fx-font-size: 21px;
+}
+.table-view .column-header,
+.table-view .column-header .filler,
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+    -fx-font-family: 'LEMON MILK';
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 15px;
+    -fx-font-weight: NORMAL;
+    -fx-font-family: 'LEMON MILK';
+}
+
+.text {
+    -fx-font-family: 'LEMON MILK';
+}
+
+.textfield {
+    -fx-background-color: #73574c;
+    -fx-text-fill: #f37046;
+    -fx-font-family: 'LEMON MILK';
+    -fx-border-radius: 0;
+    -fx-prompt-text-fill: #ffd8bb;
+
+}
