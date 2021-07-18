@@ -25,6 +25,11 @@
     -fx-control-inner-background: transparent;
 }
 
+.tooltip{
+-fx-font-size: 12px;
+-fx-font-family: 'LEMON MILK';
+}
+
 .table-cell {
     -fx-alignment: CENTER;
 }

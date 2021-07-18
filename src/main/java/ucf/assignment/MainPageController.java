@@ -25,6 +25,7 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import java.io.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -42,17 +43,17 @@ public class MainPageController implements Initializable{
     public TextField inputName; //textfied input to store the item added to the to-do list
     public TextField inputSerial; //textfied input to store the item added to the to-do list
     public TextField inputPrice; //textfied input to store the item added to the to-do list
-    public Button addItem; //adding item to said list
-    public Button delete; //initiating the button to delete a selected item from the list
-    public DatePicker datePicker; //choosing date to submit to to-do list
-    public Button ClearingList; //button to execute the action of deleting all items from list
-    public Button savingList;
 
     public TableView<MainPageModel> tableview; //table to display tasks
     public TableColumn<MainPageModel, String>  colName;
     public TableColumn<MainPageModel, String>  colSerial;
     public TableColumn<MainPageModel, Double>  colPrice;
-
+    public Button addToIn;
+    public Button removeIn;
+    public Button saveIn;
+    public Button openIn;
+    public TextField searchBar;
+    public Text errorThrown;
 
 
     FileChooser fileChooser = new FileChooser(); //instance of the file chooser
@@ -64,10 +65,18 @@ public class MainPageController implements Initializable{
         colSerial.setCellValueFactory(new PropertyValueFactory<>("itemSerial")); //initializing taksks
         colSerial.setCellFactory(TextFieldTableCell.forTableColumn()); //setting tasks to accept the text
         colPrice.setCellValueFactory(new PropertyValueFactory<>("itemPrice")); //initializing taksks
-
         tableview.setItems(observableList); //printle items of the table
         tableview.setEditable(true); //determining them editable
         tableview.setPlaceholder(new Label(" "));//displays no contents in table before items are added to the list
+        addToIn.setTooltip(new Tooltip("Add to list"));
+        removeIn.setTooltip(new Tooltip("Remove from list"));
+        saveIn.setTooltip(new Tooltip("Save list"));
+        openIn.setTooltip(new Tooltip("Open list"));
+        inputName.setTooltip(new Tooltip("Type in name"));
+        inputPrice.setTooltip(new Tooltip("Type in price"));
+        inputSerial.setTooltip(new Tooltip("Type in serial number \n Ten digits \n Numbers and letters"));
+        tableview.setTooltip(new Tooltip("Display items"));
+        searchBar.setTooltip(new Tooltip("Open list"));
 
 }
 
@@ -82,17 +91,35 @@ public class MainPageController implements Initializable{
     public void addItems(ActionEvent event){ //function to add items to list
         try{
             addItemsDisplay();
-            refresh();}
+            }
+
         catch (Exception exception){
-            //inputTask.setPromptText("Input a valid task.");
+            exception.printStackTrace();
              }
     }
 
-
     public void addItemsDisplay(){
-        String date = datePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")); //pull in format for the date
-        MainPageModel model = new MainPageModel(inputName.getText(), inputSerial.getText(), Double.parseDouble(inputPrice.getText()));//run the inputted text through the model to designate which values land where
-        tableview.getItems().add(model);//display said items on the table
+        if(inputName.getText().length()>=2 && inputSerial.getText().length()==10) {
+            MainPageModel model = new MainPageModel(inputName.getText(), inputSerial.getText(), Double.parseDouble(inputPrice.getText()));//run the inputted text through the model to designate which values land where
+            tableview.getItems().add(model);//display said items on the table
+            refresh();
+        }
+        else{
+            if(inputName.getText().length()<2 && inputSerial.getText().length()==10){
+                errorThrown.setText("Name length must be ateleast 2 characters.");
+            }
+            else if(inputName.getText().length()>=2 && inputSerial.getText().length()!=10){
+                errorThrown.setText("Serial number must be 10 characters.");
+            }
+            else if(inputName.getText().length()<2 && inputSerial.getText().length()!=10){
+                errorThrown.setText("Name length must be ateleast 2 characters.\nSerial number must be 10 characters.");
+            }
+            else{
+                errorThrown.setText("An unknown error has occured.");
+            }
+
+        }
+
     }
 
     @FXML
@@ -115,27 +142,12 @@ public class MainPageController implements Initializable{
         model.setItemName(modelStringCellEditEvent.getNewValue()); //replacing said item
     }
 
-    @FXML
-    public void clearList(ActionEvent event){//clearing list
-        clearListDisplay(); //grabbing all items to clear
-    }
-
-    public void clearListDisplay(){
-        tableview.getItems().clear();
-    }
-
-
     //refresh to reset the items in the list
     private void refresh(){
         inputName.setText(null); //reeset textfield to be empty before the item is introduced
         inputSerial.setText(null); //reeset textfield to be empty before the item is introduced
         inputPrice.setText(null); //reeset textfield to be empty before the item is introduced
     }
-
-    public void CompleteTask(){
-
-    }
-
 
     //Storage of contents
     @FXML
@@ -144,7 +156,7 @@ public class MainPageController implements Initializable{
     }
 
     public void saveListDisplay (){
-        Window stage = savingList.getScene().getWindow(); //displaying and opening
+        Window stage = saveIn.getScene().getWindow(); //displaying and opening
         fileChooser.setTitle("Save"); //title
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter( "text file", "*.txt")); //filtering to only have relevant files
         BufferedWriter bw = null; //buffered writer to make easier
@@ -172,7 +184,7 @@ public class MainPageController implements Initializable{
     }
 
     public void handleOpenDisplay(){
-        Window stage = savingList.getScene().getWindow(); //displaying and opening
+        Window stage = openIn.getScene().getWindow(); //displaying and opening
         fileChooser.setTitle("Save"); //title
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter( "text file", "*.txt")); //filtering to only have relevant files
         try {
