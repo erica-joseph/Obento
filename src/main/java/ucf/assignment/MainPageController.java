@@ -123,9 +123,9 @@ public class MainPageController implements Initializable{
 
 
     ObservableList<MainPageModel> observableList = FXCollections.observableArrayList(
-            new MainPageModel("Xbox1", "A4HRY78", 2.25),
-            new MainPageModel("LunchBox", "RGG5ER5", 5.25),
-            new MainPageModel("PS5", "EFGR45E", 3.25)
+            new MainPageModel("Mafia 3", "A4HRY78KM", 2.25),
+            new MainPageModel("Detroit: Become Human", "RGG5ER55M4", 5.25),
+            new MainPageModel("Red Dead Redemption", "EFGR45EK55", 3.25)
     );
 
 
