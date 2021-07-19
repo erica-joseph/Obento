@@ -5,16 +5,27 @@ package ucf.assignment;
  */
 import java.net.URL;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+
+
+
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
+
+import javafx.beans.binding.StringExpression;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -65,7 +76,7 @@ public class MainPageController implements Initializable{
         colSerial.setCellValueFactory(new PropertyValueFactory<>("itemSerial")); //initializing taksks
         colSerial.setCellFactory(TextFieldTableCell.forTableColumn()); //setting tasks to accept the text
         colPrice.setCellValueFactory(new PropertyValueFactory<>("itemPrice")); //initializing taksks
-        tableview.setItems(observableList); //printle items of the table
+        //tableview.setItems(observableList); //printle items of the table
         tableview.setEditable(true); //determining them editable
         tableview.setPlaceholder(new Label(" "));//displays no contents in table before items are added to the list
         addToIn.setTooltip(new Tooltip("Add to list"));
@@ -75,14 +86,46 @@ public class MainPageController implements Initializable{
         inputName.setTooltip(new Tooltip("Type in name"));
         inputPrice.setTooltip(new Tooltip("Type in price"));
         inputSerial.setTooltip(new Tooltip("Type in serial number \n Ten digits \n Numbers and letters"));
-        tableview.setTooltip(new Tooltip("Display items"));
-        searchBar.setTooltip(new Tooltip("Open list"));
+        tableview.setTooltip(new Tooltip("Double-click to edit"));
+        searchBar.setTooltip(new Tooltip("Search list"));
+
+        //tableview.setItems(observableList);
+
+        FilteredList<MainPageModel> filteredData = new FilteredList<>(observableList, b-> true);
+
+        searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(mainPageModel -> {
+                // If filter text is empty, display all persons.
+
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                // Compare first name and last name of every person with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (mainPageModel.getItemName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches first name.
+                }
+                else if(mainPageModel.getItemSerial().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches last name.
+                }
+                else return String.valueOf(mainPageModel.getItemPrice()).contains(lowerCaseFilter);
+            });
+        });
+
+        SortedList<MainPageModel> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(tableview.comparatorProperty());
+
+        tableview.setItems(sortedData);
 
 }
 
 
     ObservableList<MainPageModel> observableList = FXCollections.observableArrayList(
-            new MainPageModel("Xbox1", "A4HRY78", 2.25)
+            new MainPageModel("Xbox1", "A4HRY78", 2.25),
+            new MainPageModel("LunchBox", "RGG5ER5", 5.25),
+            new MainPageModel("PS5", "EFGR45E", 3.25)
     );
 
 
@@ -101,7 +144,7 @@ public class MainPageController implements Initializable{
     public void addItemsDisplay(){
         if(inputName.getText().length()>=2 && inputSerial.getText().length()==10) {
             MainPageModel model = new MainPageModel(inputName.getText(), inputSerial.getText(), Double.parseDouble(inputPrice.getText()));//run the inputted text through the model to designate which values land where
-            tableview.getItems().add(model);//display said items on the table
+            observableList.add(model);//display said items on the table
             refresh();
         }
         else{
@@ -226,6 +269,8 @@ public class MainPageController implements Initializable{
         }
         catch(Exception e){}
     }
+
+
 
 
 //    //Changing Scenes
