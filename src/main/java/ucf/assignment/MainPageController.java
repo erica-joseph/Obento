@@ -142,8 +142,10 @@ public class MainPageController implements Initializable{
     }
 
     public void addItemsDisplay(){
+
+        try{
         if(inputName.getText().length()>=2 && inputSerial.getText().length()==10) {
-            MainPageModel model = new MainPageModel(inputName.getText(), inputSerial.getText(), Double.parseDouble(inputPrice.getText()));//run the inputted text through the model to designate which values land where
+            MainPageModel model = new MainPageModel(inputName.getText().toUpperCase(), inputSerial.getText().toUpperCase(), Double.parseDouble(inputPrice.getText()));//run the inputted text through the model to designate which values land where
             observableList.add(model);//display said items on the table
             refresh();
         }
@@ -160,6 +162,10 @@ public class MainPageController implements Initializable{
             else{
                 errorThrown.setText("An unknown error has occured.");
             }
+
+        }
+        }
+        catch(Exception ignored){
 
         }
 
@@ -215,7 +221,7 @@ public class MainPageController implements Initializable{
             bw.close(); //closing bufered writer
             fw.close();
         }
-        catch(Exception e){
+        catch(Exception ignored){
 
         }
     }
@@ -267,7 +273,7 @@ public class MainPageController implements Initializable{
                 tableview.getItems().add(modelTest);
             }
         }
-        catch(Exception e){}
+        catch(Exception ignored){}
     }
 
 
