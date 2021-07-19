@@ -56,5 +56,6 @@
             <Font size="16.0" />
          </font>
       </Text>
+      <Button fx:id="help" layoutX="683.0" layoutY="497.0" mnemonicParsing="false" onAction="#taketoHelp" prefHeight="19.0" prefWidth="75.0" style="-fx-font-size: 12px;" text="Help" />
    </children>
 </AnchorPane>
