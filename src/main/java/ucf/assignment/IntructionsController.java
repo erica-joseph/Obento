@@ -1,11 +1,17 @@
 package ucf.assignment;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import  javafx.scene.control.Button;
 import java.awt.*;
@@ -15,9 +21,19 @@ import java.util.ResourceBundle;
 
 public class IntructionsController implements Initializable {
     public Button home;
+    public TableView<MainPageModel> tableView;
+    public TableColumn<MainPageModel, String> colName;
+    public TableColumn<MainPageModel, String>  colSerial;
+    public TableColumn<MainPageModel, Double>  colPrice;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources){}
+    public void initialize(URL location, ResourceBundle resources){
+        colName.setCellValueFactory(new PropertyValueFactory<>("itemName")); //initializing taksks
+        colSerial.setCellValueFactory(new PropertyValueFactory<>("itemSerial")); //initializing taksks
+        colPrice.setCellValueFactory(new PropertyValueFactory<>("itemPrice")); //initializing taksks
+
+        tableView.setItems(observableList);
+    }
 
     public void taketoHome(ActionEvent event) throws Exception {
         Stage stage;//set stage
@@ -29,5 +45,8 @@ public class IntructionsController implements Initializable {
         scene.getStylesheets().add("ucf/assignment/Style/Inventory.css");//load the custom cascading sheed
         stage.show(); // display the stage
     }
+    ObservableList<MainPageModel> observableList = FXCollections.observableArrayList(
+            new MainPageModel("Example", "EXAMPLE000", 0.00)
+    );
 }
 
