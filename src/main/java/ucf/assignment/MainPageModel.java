@@ -19,6 +19,18 @@ public class MainPageModel {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof MainPageModel)) {
+            return false;
+        }
+        MainPageModel model = (MainPageModel) o;
+        return model.itemName.isEqualTo(itemName).get() &&
+                model.itemSerial.isEqualTo(itemSerial).get() &&
+                model.itemPrice.isEqualTo(itemPrice).get();
+    }
+
     public String getItemName() {
         return itemName.get();
     }

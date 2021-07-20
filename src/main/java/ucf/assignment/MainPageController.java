@@ -3,12 +3,13 @@ package ucf.assignment;
  *  UCF COP3330 Summer 2021 Assignment 4 Solution
  *  Copyright 2021 Erica Joseph
  */
+
 import java.net.URL;
+import ucf.assignment.HTMLModel;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-
 
 
 import javafx.collections.ObservableList;
@@ -34,6 +35,7 @@ import java.util.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 
 import java.io.*;
+
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.text.Text;
@@ -43,7 +45,7 @@ import javafx.stage.Window;
 
 import static javafx.scene.control.cell.CheckBoxTableCell.*;
 
-public class MainPageController implements Initializable{
+public class MainPageController implements Initializable {
 
     //storage
 
@@ -56,9 +58,9 @@ public class MainPageController implements Initializable{
     public TextField inputPrice; //textfied input to store the item added to the to-do list
 
     public TableView<MainPageModel> tableview; //table to display tasks
-    public TableColumn<MainPageModel, String>  colName;
-    public TableColumn<MainPageModel, String>  colSerial;
-    public TableColumn<MainPageModel, Double>  colPrice;
+    public TableColumn<MainPageModel, String> colName;
+    public TableColumn<MainPageModel, String> colSerial;
+    public TableColumn<MainPageModel, Double> colPrice;
     public Button addToIn;
     public Button removeIn;
     public Button saveIn;
@@ -68,11 +70,10 @@ public class MainPageController implements Initializable{
     public Button help;
 
 
-
     FileChooser fileChooser = new FileChooser(); //instance of the file chooser
 
     @Override
-    public void initialize(URL location, ResourceBundle resources){ //loading the initialized statements
+    public void initialize(URL location, ResourceBundle resources) { //loading the initialized statements
         colName.setCellValueFactory(new PropertyValueFactory<>("itemName")); //initializing taksks
         colName.setCellFactory(TextFieldTableCell.forTableColumn()); //setting tasks to accept the text
         colSerial.setCellValueFactory(new PropertyValueFactory<>("itemSerial")); //initializing taksks
@@ -93,7 +94,7 @@ public class MainPageController implements Initializable{
 
         //tableview.setItems(observableList);
 
-        FilteredList<MainPageModel> filteredData = new FilteredList<>(observableList, b-> true);
+        FilteredList<MainPageModel> filteredData = new FilteredList<>(observableList, b -> true);
 
         searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(mainPageModel -> {
@@ -108,11 +109,9 @@ public class MainPageController implements Initializable{
 
                 if (mainPageModel.getItemName().toLowerCase().contains(lowerCaseFilter)) {
                     return true; // Filter matches first name.
-                }
-                else if(mainPageModel.getItemSerial().toLowerCase().contains(lowerCaseFilter)) {
+                } else if (mainPageModel.getItemSerial().toLowerCase().contains(lowerCaseFilter)) {
                     return true; // Filter matches last name.
-                }
-                else return String.valueOf(mainPageModel.getItemPrice()).contains(lowerCaseFilter);
+                } else return String.valueOf(mainPageModel.getItemPrice()).contains(lowerCaseFilter);
             });
         });
 
@@ -121,7 +120,7 @@ public class MainPageController implements Initializable{
 
         tableview.setItems(sortedData);
 
-}
+    }
 
 
     ObservableList<MainPageModel> observableList = FXCollections.observableArrayList(
@@ -133,41 +132,40 @@ public class MainPageController implements Initializable{
 
     //Actions performed on the list
     @FXML
-    public void addItems(ActionEvent event){ //function to add items to list
-        try{
+    public void addItems(ActionEvent event) { //function to add items to list
+        try {
             addItemsDisplay();
-            }
-
-        catch (Exception exception){
+        } catch (Exception exception) {
             exception.printStackTrace();
-             }
+        }
     }
 
-    public void addItemsDisplay(){
+    public void addItemsDisplay() {
 
-        try{
-        if(inputName.getText().length()>=2 && inputSerial.getText().length()==10) {
-            MainPageModel model = new MainPageModel(inputName.getText().toUpperCase(), inputSerial.getText().toUpperCase(), Double.parseDouble(inputPrice.getText()));//run the inputted text through the model to designate which values land where
-            observableList.add(model);//display said items on the table
-            refresh();
-        }
-        else{
-            if(inputName.getText().length()<2 && inputSerial.getText().length()==10){
-                errorThrown.setText("Name length must be ateleast 2 characters.");
-            }
-            else if(inputName.getText().length()>=2 && inputSerial.getText().length()!=10){
-                errorThrown.setText("Serial number must be 10 characters.");
-            }
-            else if(inputName.getText().length()<2 && inputSerial.getText().length()!=10){
-                errorThrown.setText("Name length must be ateleast 2 characters.\nSerial number must be 10 characters.");
-            }
-            else{
-                errorThrown.setText("An unknown error has occured.");
+        try {
+            if (inputName.getText().length() >= 2 && inputSerial.getText().length() == 10 && inputSerial.getText().matches("[a-zA-Z0-9]*")) {
+                MainPageModel model = new MainPageModel(inputName.getText().toUpperCase(), inputSerial.getText().toUpperCase(), Double.parseDouble(inputPrice.getText()));//run the inputted text through the model to designate which values land where
+                if (!observableList.contains(model)) {
+                    observableList.add(model);
+                }else{
+                    errorThrown.setText("All serial numbers must be unique");
+                }
+                refresh();
+            } else {
+                if (inputName.getText().length() < 2 && inputSerial.getText().length() == 10 && inputSerial.getText().matches("[a-zA-Z0-9]*")) {
+                    errorThrown.setText("Name length must be ateleast 2 characters.");
+                } else if (inputName.getText().length() >= 2 && inputSerial.getText().length() != 10) {
+                    errorThrown.setText("Serial number must be 10 characters.");
+                } else if (inputName.getText().length() < 2 && inputSerial.getText().length() != 10) {
+                    errorThrown.setText("Name length must be ateleast 2 characters.\nSerial number must be 10 characters.");
+                } else {
+                    errorThrown.setText("Make sure your serial number does not contain special characters.");
+                }
+
             }
 
-        }
-        }
-        catch(Exception ignored){
+        } catch (Exception e) {
+        e.printStackTrace();
 
         }
 
@@ -177,13 +175,10 @@ public class MainPageController implements Initializable{
     private void removeItem(ActionEvent event) {//remove item from the to-do list
         try {
             removeItemDisplay();
-        }
-        catch(Exception e){
-
-        }
+        } catch (Exception ignored) {}
     }
 
-    public void removeItemDisplay(){
+    public void removeItemDisplay() {
         int selectedItem = tableview.getSelectionModel().getSelectedIndex(); //select an item
         observableList.remove(selectedItem); //remove the selected item from the list
     }
@@ -194,7 +189,7 @@ public class MainPageController implements Initializable{
     }
 
     //refresh to reset the items in the list
-    private void refresh(){
+    private void refresh() {
         inputName.setText(null); //reeset textfield to be empty before the item is introduced
         inputSerial.setText(null); //reeset textfield to be empty before the item is introduced
         inputPrice.setText(null); //reeset textfield to be empty before the item is introduced
@@ -202,83 +197,136 @@ public class MainPageController implements Initializable{
 
     //Storage of contents
     @FXML
-    public void saveList (ActionEvent event){ //saving list
-        saveListDisplay ();
+    public void saveList(ActionEvent event) { //saving list
+        saveListDisplay();
     }
 
-    public void saveListDisplay (){
+    public void saveListDisplay() {
         Window stage = saveIn.getScene().getWindow(); //displaying and opening
         fileChooser.setTitle("Save"); //title
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter( "text file", "*.txt")); //filtering to only have relevant files
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("text file", "*.txt"),
+                new FileChooser.ExtensionFilter( "html file", "*.html")); //filtering to only have relevant files
         BufferedWriter bw = null; //buffered writer to make easier
         try {
-            File file = fileChooser.showSaveDialog((stage)); //launcing dialogue for saving
-            fileChooser.setInitialDirectory((file.getParentFile()));
-            FileWriter fw=new FileWriter(file);//writing file
-            bw = new BufferedWriter(fw);
 
-            for(MainPageModel string: observableList) {
-                fw.write(string.getItemName() + "   " + string.getItemSerial()  + "   " + string.getItemPrice() + "\n"); //splitting the columns to store separately
+                File file = fileChooser.showSaveDialog((stage)); //launcing dialogue for saving
+                fileChooser.setInitialDirectory((file.getParentFile()));
+                FileWriter fw = new FileWriter(file);//writing file
+            if (file.getName().contains(".txt")) {
+                bw = new BufferedWriter(fw);
+
+                for (MainPageModel string : observableList) {
+                    fw.write(string.getItemName() + "   " + string.getItemSerial() + "   " + string.getItemPrice() + "\n"); //splitting the columns to store separately
+                }
+                bw.close(); //closing bufered writer
+                fw.close();
             }
-            bw.close(); //closing bufered writer
-            fw.close();
-        }
-        catch(Exception ignored){
+            if (file.getName().contains(".html")) {
+                bw = new BufferedWriter(fw);
+                HTMLModel html = new HTMLModel();
+                bw.write(html.before);
+                for (MainPageModel string : observableList) {
+                    bw.write("<tr>\n<td>"+string.getItemName() + "</td><!----><td>" + string.getItemSerial() + "</td><!----><td>" + string.getItemPrice()+"</td>\n</tr>"); //splitting the columns to store separately
+                }
+                bw.write(html.after);
+                bw.close(); //closing bufered writer
+                fw.close();
+            }
+        } catch (Exception ignored) {
 
         }
     }
 
 
     @FXML
-    public void handleOpen(){ //using the file chooser to determine the path to open a file if needed
+    public void handleOpen() { //using the file chooser to determine the path to open a file if needed
         handleOpenDisplay();
     }
 
-    public void handleOpenDisplay(){
+    public void handleOpenDisplay() {
         Window stage = openIn.getScene().getWindow(); //displaying and opening
-        fileChooser.setTitle("Save"); //title
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter( "text file", "*.txt")); //filtering to only have relevant files
-        try {
-            File file = fileChooser.showOpenDialog((stage)); //launcing dialogue for saving
-            fileChooser.setInitialDirectory((file.getParentFile()));
-            Scanner buff = new Scanner(new File(String.valueOf(file))); //writing path
+        fileChooser.setTitle("Open"); //title
+        fileChooser.getExtensionFilters().addAll(
+        new FileChooser.ExtensionFilter("text file", "*.txt"),
+        new FileChooser.ExtensionFilter( "html file", "*.html")); //filtering to only have relevant files
 
-            ArrayList<String> listOfLines = new ArrayList<String>(); //storing the opened file into an arraylist
+            try {
+                observableList.clear();
+                File file = fileChooser.showOpenDialog((stage)); //launcing dialogue for saving
+                fileChooser.setInitialDirectory((file.getParentFile()));
+                Scanner buff = new Scanner(new File(String.valueOf(file))); //writing path
+                ArrayList<String> listOfLines = new ArrayList<String>(); //storing the opened file into an arraylist
+                // in the case of a txt
+                if (file.getName().contains(".txt")) {
+                    while (buff.hasNextLine()) //looping to asses each line
+                        listOfLines.add(buff.nextLine()); //adding said lines to new list
 
-            while (buff.hasNextLine()) //looping to asses each line
-                listOfLines.add(buff.nextLine()); //adding said lines to new list
-
-            for (String lines : listOfLines) { //for each with lines and lineOfLines
-                ArrayList<String> finishTest = new ArrayList<>(); //new list
-                String[] words = lines.split(","); //creating a partition for the file to separate at the commas
-                //pulling each
-                finishTest.addAll(Arrays.asList(words));
-                String retrieveName = "";
-                String retrieveSerial = "";
-                String retrievePrice = "";
+                    for (String lines : listOfLines) { //for each with lines and lineOfLines
+                        ArrayList<String> finishTest = new ArrayList<>(); //new list
+                        String[] words = lines.split("  "); //creating a partition for the file to separate at the commas
+                        //pulling each
+                        finishTest.addAll(Arrays.asList(words));
+                        String retrieveName = "";
+                        String retrieveSerial = "";
+                        String retrievePrice = "";
 
 
-                for( int i=0; i<=finishTest.size()-1; i++ ){
-                    if(i==0){
-                        retrieveName = finishTest.get(i) + "\n"; //splitting at commas and prinign as lines
+                        for (int i = 0; i <= finishTest.size() - 1; i++) {
+                            if (i == 0) {
+                                retrieveName = finishTest.get(i) + "\n"; //splitting at commas and prinign as lines
+                            } else if (i == 1) {
+                                retrieveSerial = finishTest.get(i) + "\n"; //splitting at commas and prinign as lines
+                            } else if (i == 2) {
+                                retrievePrice = finishTest.get(i) + "\n"; //splitting at commas and prinign as lines
+                            }
+
+                        }
+                        MainPageModel modelTest = new MainPageModel(retrieveName, retrieveSerial, Double.parseDouble(retrievePrice));
+                        observableList.add(modelTest);
                     }
-                    else if(i==1){
-                        retrieveSerial = finishTest.get(i) + "\n"; //splitting at commas and prinign as lines
-                    }
-                    else if(i==2){
-                        retrievePrice = finishTest.get(i) + "\n"; //splitting at commas and prinign as lines
-                    }
-
                 }
+                if (file.getName().contains(".html")) {
+                    BufferedReader bufReader = new BufferedReader(new FileReader(String.valueOf(file)));
+                    String line = bufReader.readLine();
 
-                MainPageModel modelTest = new MainPageModel(retrieveName, retrieveSerial, Double.parseDouble(retrievePrice));
-                tableview.getItems().add(modelTest);
+                    while (line != null) {
+                    if (line.startsWith("<td>") && line.endsWith("</td>")) {
+                        listOfLines.add(line);
+                    }
+                        line = bufReader.readLine();
+                }
+                bufReader.close();
+                    for (String lines : listOfLines) { //for each with lines and lineOfLines
+                        String[] words = lines.split("<!---->"); //creating a partition for the file to separate at the commas
+
+                        ArrayList<String> finishTest = new ArrayList<>(Arrays.asList(words)); //convert the split up list into an array
+
+                        String retrieveName = ""; //initiate each variable
+                        String retrieveSerial = "";
+                        String retrievePrice = "";
+
+                        for (int i = 0; i <= finishTest.size()-1; i++) { //for each
+                            if (i == 0) {
+                                retrieveName = finishTest.get(i) + "\n"; //splitting at commas and prinign as lines
+                            }
+                            else if (i == 1) {
+                                retrieveSerial = finishTest.get(i) + "\n"; //splitting at commas and prinign as lines
+                            }
+                            else if (i == 2) {
+                               retrievePrice = finishTest.get(i).replaceAll("<td>", "").replaceAll("</td>", "").toUpperCase() + "\n"; //splitting at commas and prinign as lines
+                            }
+
+                        }
+                        MainPageModel modelTest2 = new MainPageModel(retrieveName.replaceAll("<td>", "").replaceAll("</td>", "").toUpperCase(), retrieveSerial.replaceAll("<td>", "").replaceAll("</td>", "").toUpperCase(), Double.parseDouble(retrievePrice));
+                        observableList.add(modelTest2);
+
+                    }
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
             }
         }
-        catch(Exception ignored){}
-    }
-
-
 
 
     //Changing Scenes
@@ -286,7 +334,7 @@ public class MainPageController implements Initializable{
         Stage stage;//set stage
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/ucf/assignment/HelpPage.fxml")));//load the main view of fxml
         Scene scene = new Scene(root); // attach scene graph to scene
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setTitle("Help"); // displayed in window's title bar
         stage.setScene(scene); // attach scene to stage
         scene.getStylesheets().add("ucf/assignment/Style/Inventory.css");//load the custom cascading sheed
