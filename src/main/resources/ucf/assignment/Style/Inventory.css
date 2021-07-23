@@ -83,7 +83,9 @@
 .scroll-pane {
     -fx-background-color: transparent;
 }
-
+.rectangle{
+-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 0, 0, 0, 0);
+}
 .scroll-bar:horizontal, .scroll-bar:vertical{
     -fx-background-color:transparent;
 }

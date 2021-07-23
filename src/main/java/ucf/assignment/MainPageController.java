@@ -5,6 +5,9 @@ package ucf.assignment;
  */
 
 import java.net.URL;
+
+import javafx.application.Platform;
+import javafx.scene.image.Image;
 import ucf.assignment.HTMLModel;
 
 import javafx.beans.binding.Bindings;
@@ -42,6 +45,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import ucf.assignment.Main;
 
 import static javafx.scene.control.cell.CheckBoxTableCell.*;
 
@@ -68,6 +72,9 @@ public class MainPageController implements Initializable {
     public TextField searchBar;
     public Text errorThrown;
     public Button help;
+    public Menu Exit;
+    public MenuBar menu;
+    public Button exitStage;
 
 
     FileChooser fileChooser = new FileChooser(); //instance of the file chooser
@@ -135,8 +142,7 @@ public class MainPageController implements Initializable {
     public void addItems(ActionEvent event) { //function to add items to list
         try {
             addItemsDisplay();
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (Exception ignored) {
         }
     }
 
@@ -145,7 +151,10 @@ public class MainPageController implements Initializable {
         try {
             if (inputName.getText().length() >= 2 && inputSerial.getText().length() == 10 && inputSerial.getText().matches("[a-zA-Z0-9]*")) {
                 MainPageModel model = new MainPageModel(inputName.getText().toUpperCase(), inputSerial.getText().toUpperCase(), Double.parseDouble(inputPrice.getText()));//run the inputted text through the model to designate which values land where
+                String checkFor = inputSerial.getText().toUpperCase();
+
                 if (!observableList.contains(model)) {
+                    //if (!observableList.contains(model)) {
                     observableList.add(model);
                 }else{
                     errorThrown.setText("All serial numbers must be unique");
@@ -251,12 +260,13 @@ public class MainPageController implements Initializable {
         new FileChooser.ExtensionFilter( "html file", "*.html")); //filtering to only have relevant files
 
             try {
-                observableList.clear();
+
                 File file = fileChooser.showOpenDialog((stage)); //launcing dialogue for saving
                 fileChooser.setInitialDirectory((file.getParentFile()));
                 Scanner buff = new Scanner(new File(String.valueOf(file))); //writing path
                 ArrayList<String> listOfLines = new ArrayList<String>(); //storing the opened file into an arraylist
                 // in the case of a txt
+                observableList.clear();
                 if (file.getName().contains(".txt")) {
                     while (buff.hasNextLine()) //looping to asses each line
                         listOfLines.add(buff.nextLine()); //adding said lines to new list
@@ -323,8 +333,7 @@ public class MainPageController implements Initializable {
                     }
                 }
             }
-            catch (Exception e) {
-                e.printStackTrace();
+            catch (Exception ignored) {
             }
         }
 
@@ -335,9 +344,20 @@ public class MainPageController implements Initializable {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/ucf/assignment/HelpPage.fxml")));//load the main view of fxml
         Scene scene = new Scene(root); // attach scene graph to scene
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setTitle("Help"); // displayed in window's title bar
+        stage.setTitle("OBENTO: Guide"); // displayed in window's title bar
         stage.setScene(scene); // attach scene to stage
         scene.getStylesheets().add("ucf/assignment/Style/Inventory.css");//load the custom cascading sheed
         stage.show(); // display the stage
+
+    }
+
+    public void exitProgram(ActionEvent actionEvent) {
+        Platform.exit();
+    }
+
+
+
+    public void minimizeProgram(ActionEvent actionEvent) {
+       // stage.setIconified(true);
     }
 }

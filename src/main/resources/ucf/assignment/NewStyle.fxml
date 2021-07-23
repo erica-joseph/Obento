@@ -7,55 +7,73 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="525.0" prefWidth="771.0" style="-fx-background-color: #ffd8bb;" stylesheets="@Style/Inventory.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignment.MainPageController">
+<AnchorPane prefHeight="570.0" prefWidth="771.0" style="-fx-background-color: #ffd8bb;" stylesheets="@Style/Inventory.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignment.MainPageController">
    <children>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="-86.0" layoutY="-54.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fitHeight="533.0" fitWidth="479.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="-86.0" layoutY="-17.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fitHeight="533.0" fitWidth="479.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@Style/JavaUIBG6.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="129.0" fitWidth="196.0" layoutX="518.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="129.0" fitWidth="196.0" layoutX="518.0" layoutY="80.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@Style/FInishNext4.png" />
          </image>
       </ImageView>
-      <TableView fx:id="tableview" editable="true" layoutX="6.0" layoutY="63.0" prefHeight="421.0" prefWidth="428.0" style="-fx-background-color: transparent;" stylesheets="@Style/Inventory.css">
+      <TableView fx:id="tableview" editable="true" layoutX="-5.0" layoutY="100.0" prefHeight="421.0" prefWidth="428.0" style="-fx-background-color: transparent;" stylesheets="@Style/Inventory.css">
         <columns>
-          <TableColumn fx:id="colName" prefWidth="136.6666717529297" text="Name" />
-          <TableColumn fx:id="colSerial" prefWidth="186.3333282470703" text="Serial Number" />
             <TableColumn fx:id="colPrice" prefWidth="104.99998474121094" text="Price" />
+          <TableColumn fx:id="colSerial" prefWidth="186.3333282470703" text="Serial Number" />
+          <TableColumn fx:id="colName" prefWidth="136.6666717529297" text="Name" />
         </columns>
       </TableView>
-      <TextField fx:id="searchBar" layoutX="54.0" layoutY="26.0" prefHeight="25.0" prefWidth="360.0" />
-      <Button fx:id="addToIn" layoutX="498.0" layoutY="345.0" mnemonicParsing="false" onAction="#addItems" prefHeight="43.0" prefWidth="51.0" text="＋">
+      <TextField fx:id="searchBar" layoutX="54.0" layoutY="63.0" prefHeight="25.0" prefWidth="360.0" />
+      <Button fx:id="addToIn" layoutX="498.0" layoutY="382.0" mnemonicParsing="false" onAction="#addItems" prefHeight="43.0" prefWidth="51.0" text="＋">
          <font>
             <Font size="21.0" />
          </font></Button>
-      <Button fx:id="removeIn" layoutX="555.0" layoutY="345.0" mnemonicParsing="false" onAction="#removeItem" prefHeight="43.0" prefWidth="49.0" text="﹣">
+      <Button fx:id="removeIn" layoutX="555.0" layoutY="382.0" mnemonicParsing="false" onAction="#removeItem" prefHeight="43.0" prefWidth="49.0" text="﹣">
          <font>
             <Font size="21.0" />
          </font></Button>
-      <Button fx:id="saveIn" layoutX="610.0" layoutY="345.0" mnemonicParsing="false" onAction="#saveList" prefHeight="43.0" prefWidth="50.0" text="🖋">
+      <Button fx:id="saveIn" layoutX="610.0" layoutY="382.0" mnemonicParsing="false" onAction="#saveList" prefHeight="43.0" prefWidth="50.0" text="🖋">
          <font>
             <Font size="14.0" />
          </font></Button>
-      <Button fx:id="openIn" layoutX="666.0" layoutY="346.0" mnemonicParsing="false" onAction="#handleOpen" prefHeight="43.0" prefWidth="51.0" text="🗝">
+      <Button fx:id="openIn" layoutX="666.0" layoutY="382.0" mnemonicParsing="false" onAction="#handleOpen" prefHeight="43.0" prefWidth="51.0" text="🗝">
          <font>
             <Font size="14.0" />
          </font></Button>
-      <TextField fx:id="inputName" layoutX="498.0" layoutY="201.0" prefHeight="32.0" prefWidth="220.0" promptText="Item name..." styleClass="textfield" />
-      <TextField fx:id="inputSerial" layoutX="498.0" layoutY="242.0" prefHeight="32.0" prefWidth="220.0" promptText="Serial number..." styleClass="textfield" />
-      <TextField fx:id="inputPrice" layoutX="499.0" layoutY="282.0" prefHeight="32.0" prefWidth="220.0" promptText="Price..." styleClass="textfield" />
-      <Button layoutX="11.0" layoutY="18.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="38.0" text="⌕" textFill="WHITE" />
-      <Text fx:id="errorThrown" fill="#73574c" layoutX="488.0" layoutY="422.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="237.13671875">
+      <TextField fx:id="inputName" layoutX="498.0" layoutY="238.0" prefHeight="32.0" prefWidth="220.0" promptText="Item name..." styleClass="textfield" />
+      <TextField fx:id="inputSerial" layoutX="498.0" layoutY="279.0" prefHeight="32.0" prefWidth="220.0" promptText="Serial number..." styleClass="textfield" />
+      <TextField fx:id="inputPrice" layoutX="499.0" layoutY="319.0" prefHeight="32.0" prefWidth="220.0" promptText="Price..." styleClass="textfield" />
+      <Button layoutX="11.0" layoutY="55.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="38.0" text="⌕" textFill="WHITE" />
+      <Text fx:id="errorThrown" fill="#73574c" layoutX="488.0" layoutY="459.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="237.13671875">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Button fx:id="help" layoutX="683.0" layoutY="497.0" mnemonicParsing="false" onAction="#taketoHelp" prefHeight="19.0" prefWidth="75.0" style="-fx-font-size: 12px;" text="Help" />
+      <Button fx:id="help" layoutX="683.0" layoutY="534.0" mnemonicParsing="false" onAction="#taketoHelp" prefHeight="19.0" prefWidth="75.0" style="-fx-font-size: 12px;" text="Help" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="50.0" layoutX="-2.0" layoutY="-5.0" opacity="0.13" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rectangle" width="774.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#73574c" height="50.0" layoutX="-2.0" layoutY="-10.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="rectangle" width="774.0" />
+      <Button fx:id="exitStage" layoutX="716.0" layoutY="-2.0" mnemonicParsing="false" onAction="#exitProgram" prefHeight="42.0" prefWidth="52.0" style="-fx-background-color: transparent; -fx-font-size: 20px; -fx-font-weight: bold;" text=" ✖">
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Button>
+      <Text fill="#ffd8bb" layoutX="44.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Obento Inventory Tracker" wrappingWidth="256.0">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Text>
+      <ImageView fitHeight="22.0" fitWidth="26.0" layoutX="13.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Style/FInishNext4.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

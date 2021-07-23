@@ -1,5 +1,6 @@
 package ucf.assignment;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,6 +26,7 @@ public class IntructionsController implements Initializable {
     public TableColumn<MainPageModel, String> colName;
     public TableColumn<MainPageModel, String>  colSerial;
     public TableColumn<MainPageModel, Double>  colPrice;
+    public Button exitStage;
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
@@ -48,5 +50,8 @@ public class IntructionsController implements Initializable {
     ObservableList<MainPageModel> observableList = FXCollections.observableArrayList(
             new MainPageModel("Example", "EXAMPLE000", 0.00)
     );
+    public void exitProgram(ActionEvent actionEvent) {
+        Platform.exit();
+    }
 }
 
