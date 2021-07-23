@@ -52,7 +52,7 @@
       <TextField fx:id="inputSerial" layoutX="498.0" layoutY="279.0" prefHeight="32.0" prefWidth="220.0" promptText="Serial number..." styleClass="textfield" />
       <TextField fx:id="inputPrice" layoutX="499.0" layoutY="319.0" prefHeight="32.0" prefWidth="220.0" promptText="Price..." styleClass="textfield" />
       <Button layoutX="11.0" layoutY="55.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="38.0" text="⌕" textFill="WHITE" />
-      <Text fx:id="errorThrown" fill="#73574c" layoutX="488.0" layoutY="459.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="237.13671875">
+      <Text fx:id="errorThrown" fill="#73574c" layoutX="488.0" layoutY="477.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="237.13671875">
          <font>
             <Font size="16.0" />
          </font>
@@ -75,5 +75,6 @@
             <Image url="@Style/FInishNext4.png" />
          </image>
       </ImageView>
+      <Button fx:id="undo" layoutX="549.0" layoutY="428.0" mnemonicParsing="false" onAction="#undoButton" style="-fx-background-color: transparent; -fx-text-fill: #73574c; -fx-underline: true; -fx-font-size: 15px;" text="Undo Delete" />
    </children>
 </AnchorPane>

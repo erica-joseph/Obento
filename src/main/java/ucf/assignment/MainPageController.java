@@ -8,6 +8,7 @@ import java.net.URL;
 
 import javafx.application.Platform;
 import javafx.scene.image.Image;
+import javafx.util.converter.DoubleStringConverter;
 import ucf.assignment.HTMLModel;
 
 import javafx.beans.binding.Bindings;
@@ -75,6 +76,7 @@ public class MainPageController implements Initializable {
     public Menu Exit;
     public MenuBar menu;
     public Button exitStage;
+    public Button undo;
 
 
     FileChooser fileChooser = new FileChooser(); //instance of the file chooser
@@ -86,6 +88,7 @@ public class MainPageController implements Initializable {
         colSerial.setCellValueFactory(new PropertyValueFactory<>("itemSerial")); //initializing taksks
         colSerial.setCellFactory(TextFieldTableCell.forTableColumn()); //setting tasks to accept the text
         colPrice.setCellValueFactory(new PropertyValueFactory<>("itemPrice")); //initializing taksks
+        colPrice.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter())); //setting tasks to accept the text
         //tableview.setItems(observableList); //printle items of the table
         tableview.setEditable(true); //determining them editable
         tableview.setPlaceholder(new Label(" "));//displays no contents in table before items are added to the list
@@ -98,6 +101,7 @@ public class MainPageController implements Initializable {
         inputSerial.setTooltip(new Tooltip("Type in serial number \n Ten digits \n Numbers and letters"));
         tableview.setTooltip(new Tooltip("Double-click to edit"));
         searchBar.setTooltip(new Tooltip("Search list"));
+        undo.setVisible(false);
 
         //tableview.setItems(observableList);
 
@@ -135,6 +139,8 @@ public class MainPageController implements Initializable {
             new MainPageModel("Detroit: Become Human", "RGG5ER55M4", 5.25),
             new MainPageModel("Red Dead Redemption", "EFGR45EK55", 3.25)
     );
+
+    ObservableList<MainPageModel> observableListDeleted = FXCollections.observableArrayList();
 
 
     //Actions performed on the list
@@ -189,7 +195,9 @@ public class MainPageController implements Initializable {
 
     public void removeItemDisplay() {
         int selectedItem = tableview.getSelectionModel().getSelectedIndex(); //select an item
+        observableListDeleted.add(observableList.get(selectedItem));
         observableList.remove(selectedItem); //remove the selected item from the list
+        undo.setVisible(true);
     }
 
     public void onEditChange(TableColumn.CellEditEvent<MainPageModel, String> modelStringCellEditEvent) {//make list columns editable
@@ -359,5 +367,13 @@ public class MainPageController implements Initializable {
 
     public void minimizeProgram(ActionEvent actionEvent) {
        // stage.setIconified(true);
+    }
+
+    public void undoButton(ActionEvent actionEvent) {
+        if(observableListDeleted.size()!=0) {
+            observableList.add(observableListDeleted.get(observableListDeleted.size() - 1));
+            observableListDeleted.remove(observableListDeleted.get(observableListDeleted.size() - 1));
+        }
+
     }
 }
