@@ -5,13 +5,8 @@ class InventoryTracker {
     main()
 }
 
-class SceneManager{
-    scene: MapString, String
-    load()
-    getScene(String):Scene
-}
 
-class MainWinowControl{
+class MainControl{
     ItemModel()
     MainWinowControl(ItemModel, SceneManager)
     'constructor
@@ -24,24 +19,12 @@ class MainWinowControl{
     remvoveItem(String, String, Double)
 }
 
-class addItemWindowController{
+
+class itemModel{
+    ObservableList <Item>
 }
 
-class editItemWindowController{
-}
-
-class removeItemWindowController{
-}
-
-class searchItemWindowController{
-}
-
-class itemModel(){
-    - ObservableList <Item>
-
-}
-
-class Item(){
+class Item{
     name : SimpleStringProperty
     serialNumber : SimpleStringProperty
     value : SimpleDoubleProperty
@@ -53,18 +36,7 @@ class Item(){
     ....
 }
 openjfx.org.Application <|-- InventoryTracker
-InventoryTracker -- SceneManager
-SceneManager -- MainWinowControl
-SceneManager -- AddItemController
-SceneManager -- EditItemController
-SceneManager -- ConfirmRemoveItemController
-SceneManager -- SearchItemController
-MainWinowControl *-ItemModel
-AddItemController*-ItemModel
-EditItemController*-ItemModel
-ConfirmRemoveItemController*-ItemModel
-SearchItemController*-ItemModel
-ItemModel *-- Items
-
-
+InventoryTracker -- MainControl
+MainControl -- itemModel
+itemModel *-- Item
 @enduml

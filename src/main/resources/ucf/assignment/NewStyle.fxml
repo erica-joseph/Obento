@@ -26,9 +26,9 @@
       </ImageView>
       <TableView fx:id="tableview" editable="true" layoutX="11.0" layoutY="100.0" prefHeight="421.0" prefWidth="419.0" style="-fx-background-color: transparent;" stylesheets="@Style/Inventory.css">
         <columns>
-            <TableColumn fx:id="colPrice" prefWidth="63.0" text="Price" />
-          <TableColumn fx:id="colSerial" prefWidth="141.0" text="Serial Number" />
-          <TableColumn fx:id="colName" prefWidth="242.0" text="Name" />
+            <TableColumn fx:id="colPrice" prefWidth="77.0" text="Price ($)" />
+          <TableColumn fx:id="colSerial" prefWidth="148.0" text="Serial Number" />
+          <TableColumn fx:id="colName" prefWidth="221.0" text="Name" />
         </columns>
       </TableView>
       <TextField fx:id="searchBar" layoutX="54.0" layoutY="63.0" prefHeight="25.0" prefWidth="360.0" />
