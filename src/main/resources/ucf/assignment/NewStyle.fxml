@@ -4,6 +4,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -75,6 +76,12 @@
             <Image url="@Style/FInishNext4.png" />
          </image>
       </ImageView>
-      <Button fx:id="undo" layoutX="549.0" layoutY="428.0" mnemonicParsing="false" onAction="#undoButton" style="-fx-background-color: transparent; -fx-text-fill: #73574c; -fx-underline: true; -fx-font-size: 15px;" text="Undo Delete" />
+      <Button fx:id="undo" layoutX="590.0" layoutY="428.0" mnemonicParsing="false" onAction="#undoButton" style="-fx-background-color: transparent; -fx-text-fill: #73574c; -fx-underline: true; -fx-font-size: 15px;" text="Undo Delete" />
+      <Button fx:id="generateSerial" layoutX="716.0" layoutY="280.0" mnemonicParsing="false" onAction="#generateNumber" style="-fx-font-size: 15px; -fx-background-color: transparent; -fx-text-fill: #73574c;" text="≒">
+         <tooltip>
+            <Tooltip text="Generate a random serial number" />
+         </tooltip>
+      </Button>
+      <Button fx:id="Mini" layoutX="697.0" layoutY="6.0" mnemonicParsing="false" onAction="#minimize" prefHeight="18.0" prefWidth="38.0" style="-fx-font-size: 15px 20px; -fx-font-weight: BOLD;" text="▬" />
    </children>
 </AnchorPane>

@@ -15,6 +15,8 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
+import ucf.assignment.Main;
+
 
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -46,6 +48,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.util.StringConverter;
 import ucf.assignment.Main;
 
 import static javafx.scene.control.cell.CheckBoxTableCell.*;
@@ -77,18 +80,25 @@ public class MainPageController implements Initializable {
     public MenuBar menu;
     public Button exitStage;
     public Button undo;
+    public Button generateSerial;
+    public Button Mini;
 
 
     FileChooser fileChooser = new FileChooser(); //instance of the file chooser
 
     @Override
     public void initialize(URL location, ResourceBundle resources) { //loading the initialized statements
+        String serialCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+
         colName.setCellValueFactory(new PropertyValueFactory<>("itemName")); //initializing taksks
         colName.setCellFactory(TextFieldTableCell.forTableColumn()); //setting tasks to accept the text
         colSerial.setCellValueFactory(new PropertyValueFactory<>("itemSerial")); //initializing taksks
-        colSerial.setCellFactory(TextFieldTableCell.forTableColumn()); //setting tasks to accept the text
+        StringConverter<String> converter = null;
+
+        colSerial.setCellFactory(TextFieldTableCell.forTableColumn());
         colPrice.setCellValueFactory(new PropertyValueFactory<>("itemPrice")); //initializing taksks
         colPrice.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter())); //setting tasks to accept the text
+
         //tableview.setItems(observableList); //printle items of the table
         tableview.setEditable(true); //determining them editable
         tableview.setPlaceholder(new Label(" "));//displays no contents in table before items are added to the list
@@ -131,13 +141,12 @@ public class MainPageController implements Initializable {
 
         tableview.setItems(sortedData);
 
+
     }
 
 
     ObservableList<MainPageModel> observableList = FXCollections.observableArrayList(
-            new MainPageModel("Mafia 3", "A4HRY78KM", 2.25),
-            new MainPageModel("Detroit: Become Human", "RGG5ER55M4", 5.25),
-            new MainPageModel("Red Dead Redemption", "EFGR45EK55", 3.25)
+            new MainPageModel("Example", "EXAMPLE123", 1.23)
     );
 
     ObservableList<MainPageModel> observableListDeleted = FXCollections.observableArrayList();
@@ -160,7 +169,6 @@ public class MainPageController implements Initializable {
                 String checkFor = inputSerial.getText().toUpperCase();
 
                 if (!observableList.contains(model)) {
-                    //if (!observableList.contains(model)) {
                     observableList.add(model);
                 }else{
                     errorThrown.setText("All serial numbers must be unique");
@@ -202,7 +210,7 @@ public class MainPageController implements Initializable {
 
     public void onEditChange(TableColumn.CellEditEvent<MainPageModel, String> modelStringCellEditEvent) {//make list columns editable
         MainPageModel model = tableview.getSelectionModel().getSelectedItem();//grabbing an item
-        model.setItemName(modelStringCellEditEvent.getNewValue()); //replacing said item
+        model.setItemName(modelStringCellEditEvent.getNewValue().substring(0, 9)); //replacing said item
     }
 
     //refresh to reset the items in the list
@@ -363,17 +371,28 @@ public class MainPageController implements Initializable {
         Platform.exit();
     }
 
-
-
-    public void minimizeProgram(ActionEvent actionEvent) {
-       // stage.setIconified(true);
-    }
-
     public void undoButton(ActionEvent actionEvent) {
         if(observableListDeleted.size()!=0) {
             observableList.add(observableListDeleted.get(observableListDeleted.size() - 1));
             observableListDeleted.remove(observableListDeleted.get(observableListDeleted.size() - 1));
         }
 
+    }
+
+    public void generateNumber(ActionEvent actionEvent) {
+        String serialCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder serial = new StringBuilder();
+        Random rnd = new Random();
+        while (serial.length() < 10) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * serialCharacters.length());
+            serial.append(serialCharacters.charAt(index));
+        }
+        String serialStr = serial.toString();
+        inputSerial.setText(serialStr);
+    }
+
+    public void minimize(ActionEvent event){
+        Stage obj = (Stage) Mini.getScene().getWindow();
+        obj.setIconified(true);
     }
 }

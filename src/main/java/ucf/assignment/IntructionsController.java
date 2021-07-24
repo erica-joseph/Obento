@@ -27,6 +27,7 @@ public class IntructionsController implements Initializable {
     public TableColumn<MainPageModel, String>  colSerial;
     public TableColumn<MainPageModel, Double>  colPrice;
     public Button exitStage;
+    public Button Mini;
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
@@ -52,6 +53,11 @@ public class IntructionsController implements Initializable {
     );
     public void exitProgram(ActionEvent actionEvent) {
         Platform.exit();
+    }
+
+    public void minimize(ActionEvent event) {
+        Stage obj = (Stage) Mini.getScene().getWindow();
+        obj.setIconified(true);
     }
 }
 
