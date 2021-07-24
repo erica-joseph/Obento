@@ -1,27 +1,23 @@
 package ucf.assignment;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ModifiableObservableListBase;
 import javafx.collections.ObservableList;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainPageControllerTest2 {
     /*
-    The user shall interact with the application through a Graphical User Interface
-    The user shall be able to store at least 100 inventory items
-    Each inventory item shall have a value representing its monetary value in US dollars
     Each inventory item shall have a unique serial number in the format of XXXXXXXXXX where X can be either a letter or digit
-    Each inventory item shall have a name between 2 and 256 characters in length (inclusive)
-    The user shall be able to add a new inventory item
-    The application shall display an error message if the user enters an existing serial number for the new item
-    The user shall be able to remove an existing inventory item
     The user shall be able to edit the value of an existing inventory item
     The user shall be able to edit the serial number of an existing inventory item
     The application shall prevent the user from duplicating the serial number
@@ -55,6 +51,38 @@ class MainPageControllerTest2 {
     }
 
     @Test
+    void addItemsMeetStandard() {
+        String inputName = "Uncharted<>";
+        String inputSerial = "12345ABCDE12";
+        double price = 5.5;
+
+        ObservableList<MainPageModel> observableList3 = FXCollections.observableArrayList();
+
+        if (inputName.length() >= 2 && inputSerial.length() == 10 && inputSerial.matches("[a-zA-Z0-9]*")) {
+                observableList3.add(new MainPageModel(inputName, inputSerial, price));
+        }
+        assertNotEquals(1, observableList3.size());
+    }
+
+    @Test
+    void errorThrownifConditionNotMet(){
+        String inputName = "Uncharted<>";
+        String inputSerial = "12345ABCDE12";
+        double price = 5.5;
+
+        ObservableList<MainPageModel> observableList3 = FXCollections.observableArrayList();
+
+        String errorthrown = null;
+        if (inputName.length() >= 2 && inputSerial.length() == 10 && inputSerial.matches("[a-zA-Z0-9]*")) {
+            observableList3.add(new MainPageModel(inputName, inputSerial, price));
+            errorthrown= "No error has occured";
+        }
+        else{
+            errorthrown = "An error has occured";
+        }
+        assertEquals("An error has occured", errorthrown);
+    }
+    @Test
     void onEditChange_change_if_need() {
 
     }
@@ -77,16 +105,37 @@ class MainPageControllerTest2 {
 
 
     @Test
-    void handleOpenDisplay() {/*
-        Window stage = openIn.getScene().getWindow(); //displaying and opening
-        fileChooser.setTitle("Open"); //title
-        fileChooser.getExtensionFilters().addAll(
-        new FileChooser.ExtensionFilter("text file", "*.txt"),
-        new FileChooser.ExtensionFilter( "html file", "*.html")); //filtering to only have relevant files
-        File file = fileChooser.showOpenDialog((stage)); //launcing dialogue for saving
-        fileChooser.setInitialDirectory((file.getParentFile()));
-        Scanner buff = new Scanner(new File(String.valueOf(file))); //writing path
-        ArrayList<String> listOfLines = new ArrayList<String>();
-        */
+    void make_sure_one_hundred_items_table() throws FileNotFoundException {
+
+        String serialCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        String nameCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        Double priceRandom = Math.random()*(50-1)+1;
+
+        ObservableList<MainPageModel> observableList1 = FXCollections.observableArrayList();
+
+        for(int i = 0; i <=99; i++){
+
+            StringBuilder serial = new StringBuilder();
+            Random rnd = new Random();
+            while (serial.length() < 10) { // length of the random string.
+                int index = (int) (rnd.nextFloat() * serialCharacters.length());
+                serial.append(serialCharacters.charAt(index));
+            }
+            String serialStr = serial.toString();
+
+            StringBuilder name = new StringBuilder();
+            Random rnd2 = new Random();
+            while (name.length() < 10) { // length of the random string.
+                int index = (int) (rnd2.nextFloat() * nameCharacters.length());
+                name.append(nameCharacters.charAt(index));
+            }
+            String nameStr = name.toString();
+
+            observableList1.add(new MainPageModel(nameStr, serialStr,priceRandom));
+
+        }
+
+        assertEquals(100, observableList1.size());
+
     }
 }
