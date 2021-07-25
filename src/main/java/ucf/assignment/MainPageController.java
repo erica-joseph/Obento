@@ -41,6 +41,7 @@ import java.util.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 
 import java.io.*;
+import java.util.stream.Collectors;
 
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -164,15 +165,16 @@ public class MainPageController implements Initializable {
     public void addItemsDisplay() {
 
         try {
-            if (inputName.getText().length() >= 2 && inputSerial.getText().length() == 10 && inputSerial.getText().matches("[a-zA-Z0-9]*")) {
+
+            ArrayList<MainPageModel> testingOut = new ArrayList<>(observableList);
+            MainPageModel[] experiment;
+            experiment = testingOut.toArray(new MainPageModel[0]);
+            int result = checkforDuplicates(experiment,inputSerial.getText());
+
+            if (inputName.getText().length() >= 2 && inputSerial.getText().length() == 10 && inputSerial.getText().matches("[a-zA-Z0-9]*") && result == -1) {
                 MainPageModel model = new MainPageModel(inputName.getText().toUpperCase(), inputSerial.getText().toUpperCase(), Double.parseDouble(inputPrice.getText()));//run the inputted text through the model to designate which values land where
                 String checkFor = inputSerial.getText().toUpperCase();
-
-                if (!observableList.contains(model)) {
-                    observableList.add(model);
-                }else{
-                    errorThrown.setText("All serial numbers must be unique");
-                }
+                observableList.add(model);
                 refresh();
             } else {
                 if (inputName.getText().length() < 2 && inputSerial.getText().length() == 10 && inputSerial.getText().matches("[a-zA-Z0-9]*")) {
@@ -181,7 +183,10 @@ public class MainPageController implements Initializable {
                     errorThrown.setText("Serial number must be 10 characters.");
                 } else if (inputName.getText().length() < 2 && inputSerial.getText().length() != 10) {
                     errorThrown.setText("Name length must be ateleast 2 characters.\nSerial number must be 10 characters.");
-                } else {
+                } else if(result != -1){
+                    System.out.println("All serial numbers must be unique");
+                }
+                else {
                     errorThrown.setText("Make sure your serial number does not contain special characters.");
                 }
 
@@ -351,6 +356,21 @@ public class MainPageController implements Initializable {
             }
             catch (Exception ignored) {
             }
+        }
+
+        public int checkforDuplicates(MainPageModel[] arr, String x){
+            int l = 0, r = arr.length - 1;
+            while (l <= r) {
+                int m = l + (r - l) / 2;
+                int res = x.compareTo(String.valueOf(arr[m]));
+                if (res == 0)
+                    return m;
+                if (res > 0)
+                    l = m + 1;
+                else
+                    r = m - 1;
+            }
+            return -1;
         }
 
 
