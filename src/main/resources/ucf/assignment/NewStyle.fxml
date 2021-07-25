@@ -25,12 +25,15 @@
             <Image url="@Style/FInishNext4.png" />
          </image>
       </ImageView>
-      <TableView fx:id="tableview" editable="true" layoutX="11.0" layoutY="100.0" prefHeight="421.0" prefWidth="419.0" style="-fx-background-color: transparent;" stylesheets="@Style/Inventory.css">
+      <TableView fx:id="tableview" editable="true" layoutX="11.0" layoutY="100.0" onInputMethodTextChanged="#onEditChange" prefHeight="421.0" prefWidth="419.0" style="-fx-background-color: transparent;" stylesheets="@Style/Inventory.css">
         <columns>
             <TableColumn fx:id="colPrice" prefWidth="77.0" text="Price ($)" />
           <TableColumn fx:id="colSerial" prefWidth="148.0" text="Serial Number" />
           <TableColumn fx:id="colName" prefWidth="221.0" text="Name" />
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
       <TextField fx:id="searchBar" layoutX="54.0" layoutY="63.0" prefHeight="25.0" prefWidth="360.0" />
       <Button fx:id="addToIn" layoutX="498.0" layoutY="382.0" mnemonicParsing="false" onAction="#addItems" prefHeight="43.0" prefWidth="51.0" text="＋">

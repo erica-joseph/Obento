@@ -17,7 +17,6 @@ import javafx.beans.value.ObservableValue;
 
 import ucf.assignment.Main;
 
-
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -67,42 +66,38 @@ public class MainPageController implements Initializable {
     public TextField inputPrice; //textfied input to store the item added to the to-do list
 
     public TableView<MainPageModel> tableview; //table to display tasks
-    public TableColumn<MainPageModel, String> colName;
-    public TableColumn<MainPageModel, String> colSerial;
-    public TableColumn<MainPageModel, Double> colPrice;
-    public Button addToIn;
-    public Button removeIn;
-    public Button saveIn;
-    public Button openIn;
-    public TextField searchBar;
-    public Text errorThrown;
-    public Button help;
-    public Menu Exit;
-    public MenuBar menu;
-    public Button exitStage;
-    public Button undo;
-    public Button generateSerial;
-    public Button Mini;
+    public TableColumn<MainPageModel, String> colName; //column that holds the name of the items
+    public TableColumn<MainPageModel, String> colSerial; //column that holds the serial number
+    public TableColumn<MainPageModel, Double> colPrice; //column that holds the price
+    public Button addToIn; //button for adding items to tableview
+    public Button removeIn; //button for deleting an item from tableview
+    public Button saveIn; //button to save entire list
+    public Button openIn; //button to open previously saved list
+    public TextField searchBar; //search through items dynamically
+    public Text errorThrown; //error message for users that changes based on the error
+    public Button help; //help button to assist users
+    public Button exitStage; //exit button on main menu
+    public Button undo; //undo delete button
+    public Button generateSerial; //random serial number generator
+    public Button Mini; //minimize window
 
 
     FileChooser fileChooser = new FileChooser(); //instance of the file chooser
 
     @Override
     public void initialize(URL location, ResourceBundle resources) { //loading the initialized statements
-        String serialCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        String serialCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"; //limit for serial numbers to randomize
 
         colName.setCellValueFactory(new PropertyValueFactory<>("itemName")); //initializing taksks
         colName.setCellFactory(TextFieldTableCell.forTableColumn()); //setting tasks to accept the text
         colSerial.setCellValueFactory(new PropertyValueFactory<>("itemSerial")); //initializing taksks
-        StringConverter<String> converter = null;
-
-        colSerial.setCellFactory(TextFieldTableCell.forTableColumn());
+        colSerial.setCellFactory(TextFieldTableCell.forTableColumn());//making serial number editable
         colPrice.setCellValueFactory(new PropertyValueFactory<>("itemPrice")); //initializing taksks
-        colPrice.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter())); //setting tasks to accept the text
-
-        //tableview.setItems(observableList); //printle items of the table
+        colPrice.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter())); //making price editable
         tableview.setEditable(true); //determining them editable
         tableview.setPlaceholder(new Label(" "));//displays no contents in table before items are added to the list
+        //tool tips for multiple functions
+
         addToIn.setTooltip(new Tooltip("Add to list"));
         removeIn.setTooltip(new Tooltip("Remove from list"));
         saveIn.setTooltip(new Tooltip("Save list"));
@@ -114,33 +109,27 @@ public class MainPageController implements Initializable {
         searchBar.setTooltip(new Tooltip("Search list"));
         undo.setVisible(false);
 
-        //tableview.setItems(observableList);
-
         FilteredList<MainPageModel> filteredData = new FilteredList<>(observableList, b -> true);
 
         searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(mainPageModel -> {
-                // If filter text is empty, display all persons.
-
+                // Filters list for inputs
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
-
-                // Compare first name and last name of every person with filter text.
-                String lowerCaseFilter = newValue.toLowerCase();
-
+                String lowerCaseFilter = newValue.toLowerCase(); //compares attributes for items
                 if (mainPageModel.getItemName().toLowerCase().contains(lowerCaseFilter)) {
-                    return true; // Filter matches first name.
+                    return true; //Filter to things that match the inputed item name
                 } else if (mainPageModel.getItemSerial().toLowerCase().contains(lowerCaseFilter)) {
-                    return true; // Filter matches last name.
-                } else return String.valueOf(mainPageModel.getItemPrice()).contains(lowerCaseFilter);
+                    return true; //Filter to things that match the inputed serial number
+                } else return String.valueOf(mainPageModel.getItemPrice()).contains(lowerCaseFilter); //Filter to things that match the inputed price
             });
         });
 
-        SortedList<MainPageModel> sortedData = new SortedList<>(filteredData);
-        sortedData.comparatorProperty().bind(tableview.comparatorProperty());
+        SortedList<MainPageModel> sortedData = new SortedList<>(filteredData); //store sorted data
+        sortedData.comparatorProperty().bind(tableview.comparatorProperty());//compare
 
-        tableview.setItems(sortedData);
+        tableview.setItems(sortedData);//display the sorted data; if search is null, all is displayed
 
 
     }
@@ -148,9 +137,9 @@ public class MainPageController implements Initializable {
 
     ObservableList<MainPageModel> observableList = FXCollections.observableArrayList(
             new MainPageModel("Example", "EXAMPLE123", 1.23)
-    );
+    ); //intializing observable list stored in the tableview; holds an example text
 
-    ObservableList<MainPageModel> observableListDeleted = FXCollections.observableArrayList();
+    ObservableList<MainPageModel> observableListDeleted = FXCollections.observableArrayList(); //holds items that have been removed in "trash"
 
 
     //Actions performed on the list
@@ -166,22 +155,24 @@ public class MainPageController implements Initializable {
 
         try {
 
+            //binary search to remove duplicates
             ArrayList<MainPageModel> testingOut = new ArrayList<>(observableList);
             MainPageModel[] experiment;
             experiment = testingOut.toArray(new MainPageModel[0]);
             int result = checkforDuplicates(experiment,inputSerial.getText());
 
-            if (inputName.getText().length() >= 2 && inputSerial.getText().length() == 10 && inputSerial.getText().matches("[a-zA-Z0-9]*") && result == -1) {
+            if (inputName.getText().length() >= 2 && inputSerial.getText().length() == 10 && inputSerial.getText().matches("[a-zA-Z0-9]*") && result == -1) { //if all requirements are met
                 MainPageModel model = new MainPageModel(inputName.getText().toUpperCase(), inputSerial.getText().toUpperCase(), Double.parseDouble(inputPrice.getText()));//run the inputted text through the model to designate which values land where
-                String checkFor = inputSerial.getText().toUpperCase();
-                observableList.add(model);
+                //String checkFor = inputSerial.getText().toUpperCase();
+                observableList.add(model); //add if all conditions are met
                 refresh();
             } else {
-                if (inputName.getText().length() < 2 && inputSerial.getText().length() == 10 && inputSerial.getText().matches("[a-zA-Z0-9]*")) {
+                //input criteria and errors displayed if an error has been thrown
+                if (inputName.getText().length() < 2 && inputSerial.getText().length() == 10 && inputSerial.getText().matches("[a-zA-Z0-9]*") && result == -1) { //blocking out submissions with too little characters
                     errorThrown.setText("Name length must be ateleast 2 characters.");
-                } else if (inputName.getText().length() >= 2 && inputSerial.getText().length() != 10) {
+                } else if (inputName.getText().length() >= 2 && inputSerial.getText().length() != 10 && result == -1) { //blocking out submissions with differeng serial number lengths
                     errorThrown.setText("Serial number must be 10 characters.");
-                } else if (inputName.getText().length() < 2 && inputSerial.getText().length() != 10) {
+                } else if (inputName.getText().length() < 2 && inputSerial.getText().length() != 10 && result == -1) {
                     errorThrown.setText("Name length must be ateleast 2 characters.\nSerial number must be 10 characters.");
                 } else if(result != -1){
                     System.out.println("All serial numbers must be unique");
@@ -192,9 +183,7 @@ public class MainPageController implements Initializable {
 
             }
 
-        } catch (Exception e) {
-        e.printStackTrace();
-
+        } catch (Exception ignored) {
         }
 
     }
@@ -253,8 +242,8 @@ public class MainPageController implements Initializable {
             }
             if (file.getName().contains(".html")) {
                 bw = new BufferedWriter(fw);
-                HTMLModel html = new HTMLModel();
-                bw.write(html.before);
+                HTMLModel html = new HTMLModel(); //initializing HTML from other class
+                bw.write(html.before); //section of HTML with table and other tags
                 for (MainPageModel string : observableList) {
                     bw.write("<tr>\n<td>"+string.getItemName() + "</td><!----><td>" + string.getItemSerial() + "</td><!----><td>" + string.getItemPrice()+"</td>\n</tr>"); //splitting the columns to store separately
                 }
@@ -358,11 +347,11 @@ public class MainPageController implements Initializable {
             }
         }
 
-        public int checkforDuplicates(MainPageModel[] arr, String x){
-            int l = 0, r = arr.length - 1;
+        public int checkforDuplicates(MainPageModel[] arr, String x){ //checking for duplicates through binary search
+            int l = 0, r = arr.length - 1; //setting top and bottom
             while (l <= r) {
-                int m = l + (r - l) / 2;
-                int res = x.compareTo(String.valueOf(arr[m]));
+                int m = l + (r - l) / 2; //finding the mid term
+                int res = x.compareTo(String.valueOf(arr[m])); //comparing the right and left to the middle through search
                 if (res == 0)
                     return m;
                 if (res > 0)
@@ -389,30 +378,30 @@ public class MainPageController implements Initializable {
 
     public void exitProgram(ActionEvent actionEvent) {
         Platform.exit();
-    }
+    } //exit program
 
-    public void undoButton(ActionEvent actionEvent) {
-        if(observableListDeleted.size()!=0) {
-            observableList.add(observableListDeleted.get(observableListDeleted.size() - 1));
-            observableListDeleted.remove(observableListDeleted.get(observableListDeleted.size() - 1));
+    public void undoButton(ActionEvent actionEvent) { //undo deleted items
+        if(observableListDeleted.size()!=0) { //assuming deleted items exist
+            observableList.add(observableListDeleted.get(observableListDeleted.size() - 1)); //add deleted item to the observable list
+            observableListDeleted.remove(observableListDeleted.get(observableListDeleted.size() - 1)); //removing them from the deleted list
         }
 
     }
 
     public void generateNumber(ActionEvent actionEvent) {
-        String serialCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        StringBuilder serial = new StringBuilder();
-        Random rnd = new Random();
+        String serialCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"; //serial characters in the pool of random search
+        StringBuilder serial = new StringBuilder(); //string builder
+        Random rnd = new Random();//generate new random assortment
         while (serial.length() < 10) { // length of the random string.
-            int index = (int) (rnd.nextFloat() * serialCharacters.length());
+            int index = (int) (rnd.nextFloat() * serialCharacters.length()); //building up random letters
             serial.append(serialCharacters.charAt(index));
         }
-        String serialStr = serial.toString();
-        inputSerial.setText(serialStr);
+        String serialStr = serial.toString(); //converting to string
+        inputSerial.setText(serialStr); //setting suggested serial number
     }
 
-    public void minimize(ActionEvent event){
-        Stage obj = (Stage) Mini.getScene().getWindow();
-        obj.setIconified(true);
+    public void minimize(ActionEvent event){ //minimize window
+        Stage obj = (Stage) Mini.getScene().getWindow(); //collapsing window
+        obj.setIconified(true); //to icon
     }
 }
