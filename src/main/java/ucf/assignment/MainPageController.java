@@ -168,6 +168,7 @@ public class MainPageController implements Initializable {
             if (inputName.getText().length() >= 2 && inputSerial.getText().length() == 10 && inputSerial.getText().matches("[a-zA-Z0-9]*")) { //if all requirements are met
                 MainPageModel model = new MainPageModel(inputName.getText().toUpperCase(), inputSerial.getText().toUpperCase(), Double.parseDouble(inputPrice.getText()));//run the inputted text through the model to designate which values land where
                 //String checkFor = inputSerial.getText().toUpperCase();
+                    if(array.contains(inputSerial.getText()))
                     observableList.add(model); //add if all conditions are met
                 refresh();
             } else {
