@@ -33,7 +33,15 @@ class Item{
     .setName()
     .nameProperty
 
-    ....
+    .getName()
+    .setName()
+    .nameProperty
+
+    .getName()
+    .setName()
+    .nameProperty
+
+
 }
 openjfx.org.Application <|-- InventoryTracker
 InventoryTracker -- MainControl

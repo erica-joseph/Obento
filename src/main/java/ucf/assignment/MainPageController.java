@@ -122,7 +122,8 @@ public class MainPageController implements Initializable {
                     return true; //Filter to things that match the inputed item name
                 } else if (mainPageModel.getItemSerial().toLowerCase().contains(lowerCaseFilter)) {
                     return true; //Filter to things that match the inputed serial number
-                } else return String.valueOf(mainPageModel.getItemPrice()).contains(lowerCaseFilter); //Filter to things that match the inputed price
+                } else
+                    return String.valueOf(mainPageModel.getItemPrice()).contains(lowerCaseFilter); //Filter to things that match the inputed price
             });
         });
 
@@ -159,17 +160,15 @@ public class MainPageController implements Initializable {
             ArrayList<MainPageModel> testingOut = new ArrayList<>(observableList);
             MainPageModel[] experiment;
             experiment = testingOut.toArray(new MainPageModel[0]);
-            int result = checkforDuplicates(experiment,inputSerial.getText());
+            int result = checkforDuplicates(experiment, inputSerial.getText());
+
+            ArrayList<String> array = new ArrayList<>();
+            array.add(inputSerial.getText());
 
             if (inputName.getText().length() >= 2 && inputSerial.getText().length() == 10 && inputSerial.getText().matches("[a-zA-Z0-9]*")) { //if all requirements are met
                 MainPageModel model = new MainPageModel(inputName.getText().toUpperCase(), inputSerial.getText().toUpperCase(), Double.parseDouble(inputPrice.getText()));//run the inputted text through the model to designate which values land where
                 //String checkFor = inputSerial.getText().toUpperCase();
-                if(result==-1) {
                     observableList.add(model); //add if all conditions are met
-                }
-                else{
-                    errorThrown.setText("Duplicate found.");
-                }
                 refresh();
             } else {
                 //input criteria and errors displayed if an error has been thrown
@@ -179,8 +178,7 @@ public class MainPageController implements Initializable {
                     errorThrown.setText("Serial number must be 10 characters.");
                 } else if (inputName.getText().length() < 2 && inputSerial.getText().length() != 10) {
                     errorThrown.setText("Name length must be ateleast 2 characters.\nSerial number must be 10 characters.");
-                }
-                else {
+                } else {
                     errorThrown.setText("Make sure your serial number does not contain special characters.");
                 }
 
@@ -195,7 +193,8 @@ public class MainPageController implements Initializable {
     private void removeItem(ActionEvent event) {//remove item from the to-do list
         try {
             removeItemDisplay();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     public void removeItemDisplay() {
@@ -227,13 +226,13 @@ public class MainPageController implements Initializable {
         Window stage = saveIn.getScene().getWindow(); //displaying and opening
         fileChooser.setTitle("Save"); //title
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("text file", "*.txt"),
-                new FileChooser.ExtensionFilter( "html file", "*.html")); //filtering to only have relevant files
+                new FileChooser.ExtensionFilter("html file", "*.html")); //filtering to only have relevant files
         BufferedWriter bw = null; //buffered writer to make easier
         try {
 
-                File file = fileChooser.showSaveDialog((stage)); //launcing dialogue for saving
-                fileChooser.setInitialDirectory((file.getParentFile()));
-                FileWriter fw = new FileWriter(file);//writing file
+            File file = fileChooser.showSaveDialog((stage)); //launcing dialogue for saving
+            fileChooser.setInitialDirectory((file.getParentFile()));
+            FileWriter fw = new FileWriter(file);//writing file
             if (file.getName().contains(".txt")) {
                 bw = new BufferedWriter(fw);
 
@@ -248,7 +247,7 @@ public class MainPageController implements Initializable {
                 HTMLModel html = new HTMLModel(); //initializing HTML from other class
                 bw.write(html.before); //section of HTML with table and other tags
                 for (MainPageModel string : observableList) {
-                    bw.write("<tr>\n<td>"+string.getItemName() + "</td><!----><td>" + string.getItemSerial() + "</td><!----><td>" + string.getItemPrice()+"</td>\n</tr>"); //splitting the columns to store separately
+                    bw.write("<tr>\n<td>" + string.getItemName() + "</td><!----><td>" + string.getItemSerial() + "</td><!----><td>" + string.getItemPrice() + "</td>\n</tr>"); //splitting the columns to store separately
                 }
                 bw.write(html.after);
                 bw.close(); //closing bufered writer
@@ -269,101 +268,98 @@ public class MainPageController implements Initializable {
         Window stage = openIn.getScene().getWindow(); //displaying and opening
         fileChooser.setTitle("Open"); //title
         fileChooser.getExtensionFilters().addAll(
-        new FileChooser.ExtensionFilter("text file", "*.txt"),
-        new FileChooser.ExtensionFilter( "html file", "*.html")); //filtering to only have relevant files
+                new FileChooser.ExtensionFilter("text file", "*.txt"),
+                new FileChooser.ExtensionFilter("html file", "*.html")); //filtering to only have relevant files
 
-            try {
+        try {
 
-                File file = fileChooser.showOpenDialog((stage)); //launcing dialogue for saving
-                fileChooser.setInitialDirectory((file.getParentFile()));
-                Scanner buff = new Scanner(new File(String.valueOf(file))); //writing path
-                ArrayList<String> listOfLines = new ArrayList<String>(); //storing the opened file into an arraylist
-                // in the case of a txt
-                observableList.clear();
-                if (file.getName().contains(".txt")) {
-                    while (buff.hasNextLine()) //looping to asses each line
-                        listOfLines.add(buff.nextLine()); //adding said lines to new list
+            File file = fileChooser.showOpenDialog((stage)); //launcing dialogue for saving
+            fileChooser.setInitialDirectory((file.getParentFile()));
+            Scanner buff = new Scanner(new File(String.valueOf(file))); //writing path
+            ArrayList<String> listOfLines = new ArrayList<String>(); //storing the opened file into an arraylist
+            // in the case of a txt
+            observableList.clear();
+            if (file.getName().contains(".txt")) {
+                while (buff.hasNextLine()) //looping to asses each line
+                    listOfLines.add(buff.nextLine()); //adding said lines to new list
 
-                    for (String lines : listOfLines) { //for each with lines and lineOfLines
-                        ArrayList<String> finishTest = new ArrayList<>(); //new list
-                        String[] words = lines.split("  "); //creating a partition for the file to separate at the commas
-                        //pulling each
-                        finishTest.addAll(Arrays.asList(words));
-                        String retrieveName = "";
-                        String retrieveSerial = "";
-                        String retrievePrice = "";
+                for (String lines : listOfLines) { //for each with lines and lineOfLines
+                    ArrayList<String> finishTest = new ArrayList<>(); //new list
+                    String[] words = lines.split("  "); //creating a partition for the file to separate at the commas
+                    //pulling each
+                    finishTest.addAll(Arrays.asList(words));
+                    String retrieveName = "";
+                    String retrieveSerial = "";
+                    String retrievePrice = "";
 
 
-                        for (int i = 0; i <= finishTest.size() - 1; i++) {
-                            if (i == 0) {
-                                retrieveName = finishTest.get(i) + "\n"; //splitting at commas and prinign as lines
-                            } else if (i == 1) {
-                                retrieveSerial = finishTest.get(i) + "\n"; //splitting at commas and prinign as lines
-                            } else if (i == 2) {
-                                retrievePrice = finishTest.get(i) + "\n"; //splitting at commas and prinign as lines
-                            }
-
+                    for (int i = 0; i <= finishTest.size() - 1; i++) {
+                        if (i == 0) {
+                            retrieveName = finishTest.get(i) + "\n"; //splitting at commas and prinign as lines
+                        } else if (i == 1) {
+                            retrieveSerial = finishTest.get(i) + "\n"; //splitting at commas and prinign as lines
+                        } else if (i == 2) {
+                            retrievePrice = finishTest.get(i) + "\n"; //splitting at commas and prinign as lines
                         }
-                        MainPageModel modelTest = new MainPageModel(retrieveName, retrieveSerial, Double.parseDouble(retrievePrice));
-                        observableList.add(modelTest);
-                    }
-                }
-                if (file.getName().contains(".html")) {
-                    BufferedReader bufReader = new BufferedReader(new FileReader(String.valueOf(file)));
-                    String line = bufReader.readLine();
 
-                    while (line != null) {
+                    }
+                    MainPageModel modelTest = new MainPageModel(retrieveName, retrieveSerial, Double.parseDouble(retrievePrice));
+                    observableList.add(modelTest);
+                }
+            }
+            if (file.getName().contains(".html")) {
+                BufferedReader bufReader = new BufferedReader(new FileReader(String.valueOf(file)));
+                String line = bufReader.readLine();
+
+                while (line != null) {
                     if (line.startsWith("<td>") && line.endsWith("</td>")) {
                         listOfLines.add(line);
                     }
-                        line = bufReader.readLine();
+                    line = bufReader.readLine();
                 }
                 bufReader.close();
-                    for (String lines : listOfLines) { //for each with lines and lineOfLines
-                        String[] words = lines.split("<!---->"); //creating a partition for the file to separate at the commas
+                for (String lines : listOfLines) { //for each with lines and lineOfLines
+                    String[] words = lines.split("<!---->"); //creating a partition for the file to separate at the commas
 
-                        ArrayList<String> finishTest = new ArrayList<>(Arrays.asList(words)); //convert the split up list into an array
+                    ArrayList<String> finishTest = new ArrayList<>(Arrays.asList(words)); //convert the split up list into an array
 
-                        String retrieveName = ""; //initiate each variable
-                        String retrieveSerial = "";
-                        String retrievePrice = "";
+                    String retrieveName = ""; //initiate each variable
+                    String retrieveSerial = "";
+                    String retrievePrice = "";
 
-                        for (int i = 0; i <= finishTest.size()-1; i++) { //for each
-                            if (i == 0) {
-                                retrieveName = finishTest.get(i) + "\n"; //splitting at commas and prinign as lines
-                            }
-                            else if (i == 1) {
-                                retrieveSerial = finishTest.get(i) + "\n"; //splitting at commas and prinign as lines
-                            }
-                            else if (i == 2) {
-                               retrievePrice = finishTest.get(i).replaceAll("<td>", "").replaceAll("</td>", "").toUpperCase() + "\n"; //splitting at commas and prinign as lines
-                            }
-
+                    for (int i = 0; i <= finishTest.size() - 1; i++) { //for each
+                        if (i == 0) {
+                            retrieveName = finishTest.get(i) + "\n"; //splitting at commas and prinign as lines
+                        } else if (i == 1) {
+                            retrieveSerial = finishTest.get(i) + "\n"; //splitting at commas and prinign as lines
+                        } else if (i == 2) {
+                            retrievePrice = finishTest.get(i).replaceAll("<td>", "").replaceAll("</td>", "").toUpperCase() + "\n"; //splitting at commas and prinign as lines
                         }
-                        MainPageModel modelTest2 = new MainPageModel(retrieveName.replaceAll("<td>", "").replaceAll("</td>", "").toUpperCase(), retrieveSerial.replaceAll("<td>", "").replaceAll("</td>", "").toUpperCase(), Double.parseDouble(retrievePrice));
-                        observableList.add(modelTest2);
 
                     }
+                    MainPageModel modelTest2 = new MainPageModel(retrieveName.replaceAll("<td>", "").replaceAll("</td>", "").toUpperCase(), retrieveSerial.replaceAll("<td>", "").replaceAll("</td>", "").toUpperCase(), Double.parseDouble(retrievePrice));
+                    observableList.add(modelTest2);
+
                 }
             }
-            catch (Exception ignored) {
-            }
+        } catch (Exception ignored) {
         }
+    }
 
-        public int checkforDuplicates(MainPageModel[] arr, String x){ //checking for duplicates through binary search
-            int l = 0, r = arr.length - 1; //setting top and bottom
-            while (l <= r) {
-                int m = l + (r - l) / 2; //finding the mid term
-                int res = x.compareTo(String.valueOf(arr[m])); //comparing the right and left to the middle through search
-                if (res == 0)
-                    return m;
-                if (res > 0)
-                    l = m + 1;
-                else
-                    r = m - 1;
-            }
-            return -1;
+    public int checkforDuplicates(MainPageModel[] arr, String x) { //checking for duplicates through binary search
+        int l = 0, r = arr.length - 1; //setting top and bottom
+        while (l <= r) {
+            int m = l + (r - l) / 2; //finding the mid term
+            int res = x.compareTo(String.valueOf(arr[m])); //comparing the right and left to the middle through search
+            if (res == 0)
+                return m;
+            if (res > 0)
+                l = m + 1;
+            else
+                r = m - 1;
         }
+        return -1;
+    }
 
 
     //Changing Scenes
@@ -384,7 +380,7 @@ public class MainPageController implements Initializable {
     } //exit program
 
     public void undoButton(ActionEvent actionEvent) { //undo deleted items
-        if(observableListDeleted.size()!=0) { //assuming deleted items exist
+        if (observableListDeleted.size() != 0) { //assuming deleted items exist
             observableList.add(observableListDeleted.get(observableListDeleted.size() - 1)); //add deleted item to the observable list
             observableListDeleted.remove(observableListDeleted.get(observableListDeleted.size() - 1)); //removing them from the deleted list
         }
@@ -403,7 +399,7 @@ public class MainPageController implements Initializable {
         inputSerial.setText(serialStr); //setting suggested serial number
     }
 
-    public void minimize(ActionEvent event){ //minimize window
+    public void minimize(ActionEvent event) { //minimize window
         Stage obj = (Stage) Mini.getScene().getWindow(); //collapsing window
         obj.setIconified(true); //to icon
     }
