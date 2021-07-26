@@ -161,21 +161,24 @@ public class MainPageController implements Initializable {
             experiment = testingOut.toArray(new MainPageModel[0]);
             int result = checkforDuplicates(experiment,inputSerial.getText());
 
-            if (inputName.getText().length() >= 2 && inputSerial.getText().length() == 10 && inputSerial.getText().matches("[a-zA-Z0-9]*") && result == -1) { //if all requirements are met
+            if (inputName.getText().length() >= 2 && inputSerial.getText().length() == 10 && inputSerial.getText().matches("[a-zA-Z0-9]*")) { //if all requirements are met
                 MainPageModel model = new MainPageModel(inputName.getText().toUpperCase(), inputSerial.getText().toUpperCase(), Double.parseDouble(inputPrice.getText()));//run the inputted text through the model to designate which values land where
                 //String checkFor = inputSerial.getText().toUpperCase();
-                observableList.add(model); //add if all conditions are met
+                if(result==-1) {
+                    observableList.add(model); //add if all conditions are met
+                }
+                else{
+                    errorThrown.setText("Duplicate found.");
+                }
                 refresh();
             } else {
                 //input criteria and errors displayed if an error has been thrown
-                if (inputName.getText().length() < 2 && inputSerial.getText().length() == 10 && inputSerial.getText().matches("[a-zA-Z0-9]*") && result == -1) { //blocking out submissions with too little characters
+                if (inputName.getText().length() < 2 && inputSerial.getText().length() == 10 && inputSerial.getText().matches("[a-zA-Z0-9]*")) { //blocking out submissions with too little characters
                     errorThrown.setText("Name length must be ateleast 2 characters.");
-                } else if (inputName.getText().length() >= 2 && inputSerial.getText().length() != 10 && result == -1) { //blocking out submissions with differeng serial number lengths
+                } else if (inputName.getText().length() >= 2 && inputSerial.getText().length() != 10) { //blocking out submissions with differeng serial number lengths
                     errorThrown.setText("Serial number must be 10 characters.");
-                } else if (inputName.getText().length() < 2 && inputSerial.getText().length() != 10 && result == -1) {
+                } else if (inputName.getText().length() < 2 && inputSerial.getText().length() != 10) {
                     errorThrown.setText("Name length must be ateleast 2 characters.\nSerial number must be 10 characters.");
-                } else if(result != -1){
-                    System.out.println("All serial numbers must be unique");
                 }
                 else {
                     errorThrown.setText("Make sure your serial number does not contain special characters.");
